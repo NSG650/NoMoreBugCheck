@@ -34,7 +34,6 @@ sc start NoMoreBugCheck
 # Note
 
 - If you want to revert the changes just unload the driver by running
-
 ```
 sc stop NoMoreBugCheck
 ```
