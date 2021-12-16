@@ -18,9 +18,6 @@ This was done only for fun.
 ```
 bcdedit /set testsigning on
 
-https://user-images.githubusercontent.com/51860844/146301359-d25a727a-65e5-42c8-9f31-e0fde2470264.mp4
-
-
 ```
 
 2. Create a service using SC
