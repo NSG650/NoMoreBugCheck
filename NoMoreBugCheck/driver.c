@@ -1,7 +1,7 @@
 #include <ntddk.h>
 
 CHAR KeBugCheckExOrignalBytes[14] = {0};
-PVOID KeBugCheckExAddress;
+ULONG_PTR KeBugCheckExAddress;
 
 NTSTATUS Overwrite(PVOID Address, PVOID Data, ULONG Size) {
 	PHYSICAL_ADDRESS PhysAddress = MmGetPhysicalAddress(Address);
@@ -47,10 +47,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject,
 
 	DriverObject->DriverUnload = DriverUnload;
 
-	UNICODE_STRING FunctionName;
-	RtlInitUnicodeString(&FunctionName, L"KeBugCheckEx");
-	KeBugCheckExAddress = MmGetSystemRoutineAddress(&FunctionName);
-
+	KeBugCheckExAddress = (ULONG_PTR)KeBugCheckEx;
 
 	DbgPrint("[*] Hello World\n");
 	DbgPrint("[*] KeBugCheckEx located at 0x%llx\n", KeBugCheckExAddress);
@@ -68,17 +65,16 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject,
 		DbgPrint("[*] KeBugCheckExOrignalBytes[%d]: 0x%x\n", i,
 				 KeBugCheckExOrignalBytes[i] & 0xff);
 
+	#if defined(_M_X64)
 	CHAR Patch[] = {
 	    0x49, 0xba, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, // mov r10, address
 		0x41, 0xff, 0xe2 // jmp r10
 	};
 
-	ULONG_PTR KeHookedBugCheckEx_Address = (ULONG_PTR)KeHookedBugCheckEx;
-	CHAR *KeHookedBugCheckEx_Address_Bytes = (CHAR*)&KeHookedBugCheckEx_Address;
+	ULONG_PTR KeHookedBugCheckExAddress = (ULONG_PTR)KeHookedBugCheckEx;
+	CHAR *KeHookedBugCheckExAddressBytes = (CHAR*)&KeHookedBugCheckExAddress;
 
-	for (INT i = 0; i < sizeof(ULONG_PTR); i++) {
-		Patch[2 + i] = KeHookedBugCheckEx_Address_Bytes[i];
-	}
+	RtlCopyMemory(&Patch[2], KeHookedBugCheckExAddressBytes, sizeof(ULONG_PTR));
 
 	NTSTATUS Status = Overwrite(KeBugCheckExAddress, (PVOID)Patch, sizeof(Patch));
 	
@@ -88,7 +84,10 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject,
 	}
 
 	DbgPrint("[+] Successfully overwrote KeBugCheckEx\n");
-
+	#else
+	DbgPrint("[!] Unknown architecture");
+	return STATUS_FAILED_DRIVER_ENTRY;
+	#endif
 
 	CHAR Temp[14] = {0};
 	RtlCopyMemory(Temp, KeBugCheckExAddress, 14);
