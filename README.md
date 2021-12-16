@@ -17,7 +17,6 @@ This was done only for fun.
 
 ```
 bcdedit /set testsigning on
-
 ```
 
 2. Create a service using SC
