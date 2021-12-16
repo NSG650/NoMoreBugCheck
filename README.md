@@ -4,12 +4,11 @@ Prevent Windows from BSODing no matter what happens!
 
 # Warning
 
-Windows/Drivers calls a BugCheck when something is severely wrong.
-By preventing the system from being taken down it can lead to corruption of memory or data.
-So dont use this if you want to work on a project and dont want Windows to BSOD.
-Theres a good chance you would corrupt memory or data.
-I am not responsible for the damage done to the system.
-This was done only for fun.
+Using this is the equivalent of disabling the circuit breaker in your house.
+Windows BSODs whenever a serious problem occurs to prevent memory/data corruption.
+Although your computer won't blow up you could corrupt memory/data present on the system.
+This was done only for fun and should not be used for any serious purposes.
+I am not responsible for loss of any data or damage to the system.
 
 # How to use?
 
