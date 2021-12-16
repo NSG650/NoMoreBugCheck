@@ -17,6 +17,10 @@ This was done only for fun.
 
 ```
 bcdedit /set testsigning on
+
+https://user-images.githubusercontent.com/51860844/146301359-d25a727a-65e5-42c8-9f31-e0fde2470264.mp4
+
+
 ```
 
 2. Create a service using SC
@@ -33,7 +37,7 @@ sc start NoMoreBugCheck
 
 # Demo
 
-![Demo Video Link](https://cdn.discordapp.com/attachments/855872050132811796/920736547421163520/p6oF6flk6j.mp4)
+https://user-images.githubusercontent.com/51860844/146301386-68e4b170-89c1-441e-97b0-c5bdd2b16ed8.mp4
 
 # Note
 
